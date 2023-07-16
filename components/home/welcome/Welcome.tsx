@@ -29,10 +29,18 @@ const JobTypeListItem = ({
 	)
 }
 
-const Welcome = () => {
-    const [activeJobType, setActiveJobType] = useState<string>(JOB_TYPES[0])
+const Welcome = ({
+    searchTerm,
+    setSearchTerm,
+    handlePress
+}: {
+	searchTerm: string
+	setSearchTerm: React.Dispatch<React.SetStateAction<string>>
+    handlePress: () => void
+}) => {
+	const [activeJobType, setActiveJobType] = useState<string>(JOB_TYPES[0])
 
-    const router = useRouter()
+	const router = useRouter()
 
 	return (
 		<View>
@@ -44,13 +52,16 @@ const Welcome = () => {
 				<View style={styles.searchWrapper}>
 					<TextInput
 						style={styles.searchInput}
-						value=""
-						onChange={() => {}}
-						placeholder="What are you looking for"
+						value={searchTerm}
+						onChange={e => setSearchTerm(e.nativeEvent.text)}
+						placeholder="What are you looking for?"
 					/>
 				</View>
 
-				<TouchableOpacity style={styles.searchBtn}>
+				<TouchableOpacity
+					style={styles.searchBtn}
+					onPress={handlePress}
+				>
 					<Image
 						source={icons.search}
 						style={styles.searchBtnImage}
@@ -68,7 +79,7 @@ const Welcome = () => {
 							activeType={activeJobType}
 							handlePress={() => {
 								setActiveJobType(item)
-								router.push(`/search/${item}`)
+                                router.push(`/search/${item}`);
 							}}
 						/>
 					)}

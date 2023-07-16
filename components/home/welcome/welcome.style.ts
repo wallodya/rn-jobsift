@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     },
 });
 
-export const getJobTypeTabStyles = (activeJobType, item) => {
+export const getJobTypeTabStyles = (activeJobType: string, item: string) => {
     return {
         tab: {
             paddingVertical: SIZES.small / 2,

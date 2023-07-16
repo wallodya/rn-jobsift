@@ -7,15 +7,15 @@ import {
 	FlatList,
 } from "react-native"
 
-import styles from "./popularjobs.style"
+import styles from "./nearbyjobs.style"
 import { useRouter } from "expo-router"
 import { COLORS, SIZES } from "../../../constants"
-import PopularJobCard from "../../common/cards/popular/PopularJobCard"
+import PopularJobCard from "../../common/cards/nearby/NearbyJobCard"
 import useFetch from "../../../hooks/use-fetch"
+import NearbyJobCard from "../../common/cards/nearby/NearbyJobCard"
 
-const PopularJobs = () => {
+const NearbyJobs = () => {
 	const router = useRouter()
-    const [selectedJobId, setSelectedJobId] = useState<string>("")
 
 	const { data, isError, isLoading } = useFetch("search", {
 		query: "React developer",
@@ -25,7 +25,7 @@ const PopularJobs = () => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.header}>
-				<Text style={styles.headerTitle}>Popular jobs</Text>
+				<Text style={styles.headerTitle}>Nearby jobs</Text>
 				<TouchableOpacity>
 					<Text style={styles.headerBtn}>Show all</Text>
 				</TouchableOpacity>
@@ -36,27 +36,19 @@ const PopularJobs = () => {
 				) : isError ? (
 					<Text>Something went wrong</Text>
 				) : (
-					<FlatList
-						data={data}
-						renderItem={({ item }) => (
-							<PopularJobCard
-								jobItem={item}
-                                selectedJobId={selectedJobId}
-								handlePress={() => {
-									setSelectedJobId(item.job_id)
-                                    router.push(`/job-details/${item.job_id}`)
-								}}
-							/>
-						)}
-                        keyExtractor={item => item.job_id}
-						contentContainerStyle={{ columnGap: SIZES.medium }}
-						showsHorizontalScrollIndicator={false}
-						horizontal
-					/>
+					data.map(j => (
+						<NearbyJobCard
+							jobItem={j}
+							key={j.job_id}
+							handleNavigate={() =>
+								router.push(`/job-details/${j.job_id}`)
+							}
+						/>
+					))
 				)}
 			</View>
 		</View>
 	)
 }
 
-export default PopularJobs
+export default NearbyJobs
